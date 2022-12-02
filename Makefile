@@ -4,7 +4,8 @@ base_dir   = $(abspath .)
 src_dir    = $(base_dir)/src/main
 gen_dir    = $(base_dir)/generated-src
 out_dir    = $(base_dir)/outputs
-nproc      = $(shell nproc --ignore 1)
+nproc      = 4
+#$(shell nproc --ignore 1)
 
 SBT       = sbt
 SBT_FLAGS = -ivy $(base_dir)/.ivy2
@@ -20,8 +21,8 @@ $(gen_dir)/Tile.v: $(wildcard $(src_dir)/scala/*.scala)
 CXXFLAGS += -std=c++11 -Wall -Wno-unused-variable
 
 # compile verilator
-VERILATOR = verilator --cc --exe
-VERILATOR_FLAGS = --assert -Wno-STMTDLY -O3 --trace --threads $(nproc)\
+VERILATOR = /home/schundu2/SACA_Research/Repos/Verilator/verilator/bin/verilator --cc --exe
+VERILATOR_FLAGS = --assert -Wno-STMTDLY -O3 --prof-pgo --threads $(nproc)\
 	--top-module Tile -Mdir $(gen_dir)/VTile.csrc \
 	-CFLAGS "$(CXXFLAGS) -include $(gen_dir)/VTile.csrc/VTile.h" 
 
